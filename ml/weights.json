@@ -1,0 +1,18 @@
+{
+  "feature_order": [
+    "commit_frequency",
+    "repo_diversity",
+    "project_depth",
+    "community_signal",
+    "consistency"
+  ],
+  "weights": [
+    2.9109172971723196,
+    1.2366152996991016,
+    4.004195042201373,
+    1.2949337709102822,
+    3.49727292196432
+  ],
+  "bias": -4.472947644658321,
+  "test_accuracy": 0.825
+}
