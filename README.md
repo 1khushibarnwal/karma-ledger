@@ -6,6 +6,8 @@
 
 Built in 24 hours for [Hack Devengers 2.0](https://unstop.com/hackathons/hack-devengers-20-devengers-1749441), an open-innovation hackathon hosted on Unstop.
 
+### 🚀 [Live Demo](https://karma-ledger-ten.vercel.app/)
+
 · [Report a bug](../../issues) · [Smart contract](./src/KarmaToken.sol)
 
 </div>
@@ -27,6 +29,20 @@ GitHub activity  →  feature extraction  →  logistic regression  →  score (
                                                     │
                               soulbound ERC-721 badge minted / updated
 ```
+
+---
+
+## Deployed Contract
+
+- **Network:** Ethereum Sepolia
+- **Contract:** `KarmaToken`
+- **Address:** `0xA300DebaDBa30AA663418d485ab65aAB26D3D58B`
+- **Chain ID:** `11155111`
+
+**Verified contract:**  
+https://sepolia.etherscan.io/address/0xa300debadba30aa663418d485ab65aab26d3d58b
+
+The contract source code is verified on Etherscan, so the deployed bytecode can be inspected directly and the contract's public functions can be called from the explorer.
 
 ## How a score becomes a badge
 
