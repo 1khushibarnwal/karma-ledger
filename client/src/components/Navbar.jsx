@@ -38,7 +38,7 @@ export default function Navbar() {
           className="flex shrink-0 items-center gap-2 text-ivory transition-colors hover:text-signal"
         >
           <Mark className="h-7 w-7 text-signal" />
-          <span className="font-display text-base font-semibold tracking-tight">KarmaChain</span>
+          <span className="font-display text-base font-semibold tracking-tight">KarmaLedger</span>
         </Link>
 
         <nav className="hidden flex-1 items-center gap-6 md:flex">

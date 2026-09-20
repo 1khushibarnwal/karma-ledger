@@ -1,5 +1,5 @@
 /**
- * The KarmaChain mark: an assay hallmark — the small stamp struck into precious
+ * The KarmaLedger mark: an assay hallmark — the small stamp struck into precious
  * metal to certify it. Same idea as a soulbound score: a permanent mark, made
  * once, that can't be peeled off and put on something else.
  */

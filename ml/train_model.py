@@ -1,5 +1,5 @@
 """
-KarmaChain scoring model
+KarmaLedger scoring model
 -------------------------
 Trains a lightweight logistic-regression model that maps a developer's public
 GitHub activity features -> a 0-1 "reliability/quality" probability, which the

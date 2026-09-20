@@ -8,7 +8,7 @@ const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID;
 
 if (!projectId && import.meta.env.DEV) {
   console.warn(
-    "[KarmaChain] VITE_WALLETCONNECT_PROJECT_ID is not set — only browser-extension wallets will be offered.",
+    "[KarmaLedger] VITE_WALLETCONNECT_PROJECT_ID is not set — only browser-extension wallets will be offered.",
   );
 }
 
@@ -17,10 +17,10 @@ if (!projectId && import.meta.env.DEV) {
 export const chains = [foundry, sepolia, mainnet, polygon, polygonAmoy];
 
 export const wagmiConfig = getDefaultConfig({
-  appName: "KarmaChain",
+  appName: "KarmaLedger",
   appDescription:
     "On-chain developer reputation, minted from public GitHub activity.",
-  projectId: projectId || "karmachain-local-dev",
+  projectId: projectId || "karmaledger-local-dev",
   chains,
   ssr: false,
 });

@@ -13,10 +13,12 @@ app.use(express.json());
 
 connectDB();
 
-app.get("/", (req, res) => res.json({ status: "KarmaChain API running" }));
+app.get("/", (req, res) => res.json({ status: "KarmaLedger API running" }));
 app.use("/api/score", scoreRoutes);
 app.use("/api/mint", mintRoutes);
 app.use("/api/leaderboard", leaderboardRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`KarmaChain API listening on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`KarmaLedger API listening on http://localhost:${PORT}`),
+);

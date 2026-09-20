@@ -63,7 +63,7 @@ export default function HowItWorks() {
         <ol className="mt-6 space-y-4">
           {[
             "The backend recomputes the score and signs it together with your wallet address and a one-time nonce.",
-            "Your wallet submits that signature to the KarmaChain contract.",
+            "Your wallet submits that signature to the KarmaLedger contract.",
             "The contract verifies the signature came from the trusted signer, then mints or updates your single badge.",
             "Transfers and approvals revert permanently, so the badge stays with the wallet that earned it.",
           ].map((step, i) => (

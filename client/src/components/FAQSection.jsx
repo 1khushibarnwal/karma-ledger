@@ -7,7 +7,7 @@ const FAQS = [
   },
   {
     q: "Isn't this just trusting your backend instead of a screenshot?",
-    a: "Partially, yes. The signature only proves \"KarmaChain's scoring service said this score, for this user, at this time\" — it doesn't prove the score is objectively correct. What it removes is the ability to fake or alter that claim after the fact, or attach it to the wrong wallet. That's strictly less trust than a screenshot, even though it isn't zero trust.",
+    a: "Partially, yes. The signature only proves \"KarmaLedger's scoring service said this score, for this user, at this time\" — it doesn't prove the score is objectively correct. What it removes is the ability to fake or alter that claim after the fact, or attach it to the wrong wallet. That's strictly less trust than a screenshot, even though it isn't zero trust.",
   },
   {
     q: "Can someone inflate their score by gaming GitHub activity?",

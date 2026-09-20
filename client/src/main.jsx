@@ -36,7 +36,7 @@ function RainbowKitThemeBridge({ children }) {
   return (
     <RainbowKitProvider
       theme={rainbowTheme}
-      appInfo={{ appName: "KarmaChain" }}
+      appInfo={{ appName: "KarmaLedger" }}
       modalSize="compact"
     >
       {children}

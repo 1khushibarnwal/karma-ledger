@@ -39,7 +39,7 @@ export default function DifferentiationSection() {
       <div className="overflow-hidden rounded-xl border border-hairline shadow-card">
         <div className="grid grid-cols-2 border-b border-hairline bg-surface2">
           <div className="px-4 py-3 font-mono text-xs text-muted sm:px-5">GitHub analyzer</div>
-          <div className="px-4 py-3 font-mono text-xs text-signal sm:px-5">KarmaChain</div>
+          <div className="px-4 py-3 font-mono text-xs text-signal sm:px-5">KarmaLedger</div>
         </div>
         {ROWS.map((row, i) => (
           <div
@@ -53,7 +53,7 @@ export default function DifferentiationSection() {
       </div>
 
       <p className="mt-4 max-w-2xl font-body text-sm italic text-signal">
-        A GitHub stats card is something you show someone. A KarmaChain badge is
+        A GitHub stats card is something you show someone. A KarmaLedger badge is
         something you can prove to a smart contract.
       </p>
     </section>

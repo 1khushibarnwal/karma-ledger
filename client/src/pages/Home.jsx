@@ -46,7 +46,7 @@ export default function Home() {
                 Your commits already prove who you are.
               </h1>
               <p className="mt-6 max-w-[62ch] font-body text-base leading-relaxed text-muted">
-                KarmaChain reads a developer's public GitHub activity, scores it with a
+                KarmaLedger reads a developer's public GitHub activity, scores it with a
                 trained model, and lets them mint that score as a badge that can't be
                 transferred, bought, or faked — a reputation that travels with the wallet,
                 not the platform.

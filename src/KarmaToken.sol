@@ -45,13 +45,20 @@ contract KarmaToken is ERC721, Ownable, ReentrancyGuard {
     // prevent re-using the exact same signed payload twice
     mapping(bytes32 => bool) public usedSignatures;
 
-    event KarmaMinted(address indexed to, uint256 tokenId, uint256 score, string githubUsername);
+    event KarmaMinted(
+        address indexed to,
+        uint256 tokenId,
+        uint256 score,
+        string githubUsername
+    );
 
     event KarmaUpdated(address indexed to, uint256 tokenId, uint256 newScore);
 
     event SignerUpdated(address indexed oldSigner, address indexed newSigner);
 
-    constructor(address _trustedSigner) ERC721("KarmaChain Reputation", "KARMA") Ownable(msg.sender) {
+    constructor(
+        address _trustedSigner
+    ) ERC721("KarmaLedger Reputation", "KARMA") Ownable(msg.sender) {
         if (_trustedSigner == address(0)) {
             revert ZeroAddress();
         }
@@ -77,11 +84,21 @@ contract KarmaToken is ERC721, Ownable, ReentrancyGuard {
     ///      handled: (1) the mint external call (`_safeMint` -> `onERC721Received`) is
     ///      guarded by `nonReentrant`, so event ordering after it cannot be exploited;
     ///      (2) `setTrustedSigner` does emit `SignerUpdated`, immediately before the write.
-    function mintOrUpdateKarma(uint256 score, string calldata githubUsername, uint256 nonce, bytes calldata signature)
-        external
-        nonReentrant
-    {
-        bytes32 payloadHash = keccak256(abi.encodePacked(msg.sender, score, githubUsername, nonce, address(this)));
+    function mintOrUpdateKarma(
+        uint256 score,
+        string calldata githubUsername,
+        uint256 nonce,
+        bytes calldata signature
+    ) external nonReentrant {
+        bytes32 payloadHash = keccak256(
+            abi.encodePacked(
+                msg.sender,
+                score,
+                githubUsername,
+                nonce,
+                address(this)
+            )
+        );
 
         if (usedSignatures[payloadHash]) {
             revert SignatureAlreadyUsed();
@@ -105,7 +122,12 @@ contract KarmaToken is ERC721, Ownable, ReentrancyGuard {
 
             tokenOfOwner[msg.sender] = tokenId;
 
-            karmaOf[tokenId] = KarmaData(score, githubUsername, block.timestamp, _tierFor(score));
+            karmaOf[tokenId] = KarmaData(
+                score,
+                githubUsername,
+                block.timestamp,
+                _tierFor(score)
+            );
 
             emit KarmaMinted(msg.sender, tokenId, score, githubUsername);
         } else {
@@ -128,7 +150,11 @@ contract KarmaToken is ERC721, Ownable, ReentrancyGuard {
     // Soulbound enforcement
     // -------------------------------------------------------------------------
 
-    function _update(address to, uint256 tokenId, address auth) internal override returns (address) {
+    function _update(
+        address to,
+        uint256 tokenId,
+        address auth
+    ) internal override returns (address) {
         address from = _ownerOf(tokenId);
 
         // Allow mint (from == address(0)) and burn (to == address(0)).
