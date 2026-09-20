@@ -1,31 +1,36 @@
 import { useState } from "react";
-import { connectWallet, mintKarma } from "../services/web3";
+import { useAccount } from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+
+import { mintKarma } from "../services/web3";
 import { getMintAuthorization, confirmMint } from "../services/api";
 import { useToast } from "../context/ToastContext";
+import { useEthersSigner } from "../hooks/useEthersSigner";
 import CopyButton from "./CopyButton";
 
-export default function MintButton({ githubUsername, wallet, onWalletConnected, onMinted }) {
-  const [status, setStatus] = useState("idle"); // idle | connecting | signing | minting | done | error
+export default function MintButton({ githubUsername, onMinted }) {
+  const [status, setStatus] = useState("idle"); // idle | signing | minting | done | error
   const [txHash, setTxHash] = useState(null);
   const [error, setError] = useState(null);
+
+  const { address, isConnected } = useAccount();
+  const signer = useEthersSigner();
+  const { openConnectModal } = useConnectModal();
   const showToast = useToast();
+
+  const busy = status === "signing" || status === "minting";
 
   async function handleMint() {
     setError(null);
+
+    // No wallet yet — hand off to RainbowKit rather than prompting MetaMask
+    // directly, so WalletConnect and mobile wallets are offered too.
+    if (!isConnected || !signer) {
+      openConnectModal?.();
+      return;
+    }
+
     try {
-      let signer, address;
-
-      if (wallet?.signer) {
-        // already connected via the header's wallet status — skip the extra MetaMask prompt
-        ({ signer, address } = wallet);
-      } else {
-        setStatus("connecting");
-        const connected = await connectWallet();
-        signer = connected.signer;
-        address = connected.address;
-        onWalletConnected?.(connected); // sync back up so the header reflects it too
-      }
-
       setStatus("signing");
       const auth = await getMintAuthorization(githubUsername, address);
 
@@ -45,7 +50,11 @@ export default function MintButton({ githubUsername, wallet, onWalletConnected, 
       onMinted?.();
     } catch (err) {
       console.error(err);
-      const message = err.message || "Something went wrong";
+      // Rejecting in the wallet isn't a failure worth shouting about.
+      const rejected = err?.code === "ACTION_REJECTED" || err?.code === 4001;
+      const message = rejected
+        ? "Transaction rejected in your wallet."
+        : err.shortMessage || err.reason || err.message || "Something went wrong";
       setError(message);
       setStatus("error");
       showToast(message, "error");
@@ -53,11 +62,10 @@ export default function MintButton({ githubUsername, wallet, onWalletConnected, 
   }
 
   const labels = {
-    idle: "Mint karma badge on-chain",
-    connecting: "Connecting wallet…",
+    idle: isConnected ? "Mint karma badge on-chain" : "Connect a wallet to mint",
     signing: "Getting signed authorization…",
     minting: "Confirming transaction…",
-    done: "Minted ✓",
+    done: "Minted",
     error: "Try again",
   };
 
@@ -65,24 +73,40 @@ export default function MintButton({ githubUsername, wallet, onWalletConnected, 
     <div>
       <button
         onClick={handleMint}
-        disabled={status === "connecting" || status === "signing" || status === "minting"}
-        className="w-full rounded-lg bg-signal px-6 py-3 font-display font-semibold text-ink transition-opacity hover:opacity-90 disabled:opacity-60"
+        disabled={busy || status === "done"}
+        className="w-full rounded-lg bg-signal px-6 py-3 font-display font-semibold text-surface transition-opacity hover:opacity-90 disabled:opacity-60"
       >
-        {labels[status]}
+        <span className="inline-flex items-center justify-center gap-2">
+          {busy && (
+            <span
+              className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent"
+              aria-hidden="true"
+            />
+          )}
+          {labels[status]}
+          {status === "done" && <span aria-hidden="true">✓</span>}
+        </span>
       </button>
 
+      {isConnected && address && status === "idle" && (
+        <div className="mt-2 font-mono text-xs text-muted">
+          Minting to {address.slice(0, 6)}…{address.slice(-4)}
+        </div>
+      )}
+
       {txHash && (
-        <div className="mt-2 flex items-center gap-2">
-          <span className="truncate font-mono text-xs text-muted">Tx: {txHash}</span>
+        <div className="mt-3 flex items-center gap-2 rounded-lg border border-hairline bg-surface2 px-3 py-2">
+          <span className="truncate font-mono text-xs text-muted">Tx {txHash}</span>
           <CopyButton text={txHash} />
         </div>
       )}
 
       {error && <div className="mt-2 font-body text-sm text-bronze">{error}</div>}
 
-      <div className="mt-2 font-body text-xs text-muted">
-        This badge is soulbound — it can never be transferred or sold, only re-minted to reflect an updated score.
-      </div>
+      <p className="mt-3 font-body text-xs leading-relaxed text-muted">
+        This badge is soulbound — it can never be transferred or sold, only re-minted to
+        reflect an updated score.
+      </p>
     </div>
   );
 }

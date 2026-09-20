@@ -2,14 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  background-color: #0d1117;
-  color: #e6edf3;
+/*
+  Light theme = the "assay certificate": paper stock, engraved ink, metals
+  darkened enough to hold contrast on white.
+  Dark theme = the original GitHub-dark base this app reads its data from.
+  Values are "R G B" triples so Tailwind's /opacity modifiers keep working.
+*/
+:root {
+  --c-ink: 246 248 250;
+  --c-surface: 255 255 255;
+  --c-surface2: 240 243 246;
+  --c-hairline: 212 219 226;
+  --c-ivory: 31 35 40;
+  --c-muted: 89 99 110;
+  --c-bronze: 138 94 47;
+  --c-silver: 99 110 121;
+  --c-gold: 150 106 21;
+  --c-platinum: 13 116 128;
+  --c-signal: 13 118 108;
+  --c-shadow: 31 35 40;
+  color-scheme: light;
 }
 
-::selection {
-  background-color: #d4a657;
-  color: #0d1117;
+.dark {
+  --c-ink: 13 17 23;
+  --c-surface: 22 27 34;
+  --c-surface2: 28 33 40;
+  --c-hairline: 48 54 61;
+  --c-ivory: 230 237 243;
+  --c-muted: 139 148 158;
+  --c-bronze: 176 141 87;
+  --c-silver: 199 205 212;
+  --c-gold: 212 166 87;
+  --c-platinum: 143 227 211;
+  --c-signal: 86 212 193;
+  --c-shadow: 1 4 9;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ink font-body text-ivory antialiased;
+  }
+
+  ::selection {
+    background-color: rgb(var(--c-gold));
+    color: rgb(var(--c-surface));
+  }
+
+  /* One visible focus style everywhere, instead of per-component guesswork. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-signal));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* The engraved plate every panel in the app is struck on. */
+  .plate {
+    @apply rounded-xl border border-hairline bg-surface shadow-card;
+  }
 }
 
 @keyframes toast-in {
@@ -25,4 +82,44 @@ body {
 
 .toast-enter {
   animation: toast-in 0.25s ease-out;
+}
+
+/* Faint engraved grid behind the hero — anchors the "ledger" idea without
+   becoming a decorative gradient wash. */
+.ledger-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      rgb(var(--c-hairline) / 0.5) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      rgb(var(--c-hairline) / 0.5) 1px,
+      transparent 1px
+    );
+  background-size: 64px 64px;
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #000 20%,
+    transparent 75%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 0%,
+    #000 20%,
+    transparent 75%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

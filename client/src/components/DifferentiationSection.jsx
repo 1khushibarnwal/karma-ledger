@@ -27,7 +27,7 @@ const ROWS = [
 
 export default function DifferentiationSection() {
   return (
-    <section className="mb-16">
+    <section>
       <h2 className="mb-2 font-display text-xl font-semibold text-ivory">
         How this is different from a GitHub analyzer
       </h2>
@@ -36,18 +36,18 @@ export default function DifferentiationSection() {
         entirely in what happens after the number is computed.
       </p>
 
-      <div className="overflow-hidden rounded-xl border border-hairline">
+      <div className="overflow-hidden rounded-xl border border-hairline shadow-card">
         <div className="grid grid-cols-2 border-b border-hairline bg-surface2">
-          <div className="px-5 py-3 font-mono text-xs text-muted">GitHub analyzer</div>
-          <div className="px-5 py-3 font-mono text-xs text-signal">KarmaChain</div>
+          <div className="px-4 py-3 font-mono text-xs text-muted sm:px-5">GitHub analyzer</div>
+          <div className="px-4 py-3 font-mono text-xs text-signal sm:px-5">KarmaChain</div>
         </div>
         {ROWS.map((row, i) => (
           <div
             key={i}
             className={`grid grid-cols-2 ${i !== ROWS.length - 1 ? "border-b border-hairline/60" : ""} bg-surface`}
           >
-            <div className="px-5 py-4 font-body text-sm text-muted">{row.analyzer}</div>
-            <div className="px-5 py-4 font-body text-sm text-ivory">{row.karma}</div>
+            <div className="px-4 py-4 font-body text-sm text-muted sm:px-5">{row.analyzer}</div>
+            <div className="px-4 py-4 font-body text-sm text-ivory sm:px-5">{row.karma}</div>
           </div>
         ))}
       </div>

@@ -1,30 +1,42 @@
 import { useState } from "react";
 
-export default function SearchBar({ onSearch, loading }) {
-  const [value, setValue] = useState("");
+export default function SearchBar({
+  onSearch,
+  loading,
+  initialValue = "",
+  autoFocus = false,
+  submitLabel = "Compute karma",
+}) {
+  const [value, setValue] = useState(initialValue);
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (value.trim()) onSearch(value.trim());
+    const trimmed = value.trim().replace(/^@/, "");
+    if (trimmed) onSearch(trimmed);
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full max-w-xl gap-3">
-      <div className="flex flex-1 items-center gap-2 rounded-lg border border-hairline bg-surface px-4 py-3 focus-within:border-gold/60 transition-colors">
-        <span className="text-muted font-mono text-sm">github.com/</span>
+    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3 sm:flex-row">
+      <div className="flex flex-1 items-center gap-2 rounded-lg border border-hairline bg-surface px-4 py-3 transition-colors focus-within:border-gold/60">
+        <span className="select-none font-mono text-sm text-muted">github.com/</span>
         <input
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="torvalds"
-          className="flex-1 bg-transparent font-mono text-ivory placeholder:text-muted/60 outline-none"
+          autoFocus={autoFocus}
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck="false"
+          aria-label="GitHub username"
+          className="w-full flex-1 bg-transparent font-mono text-ivory outline-none placeholder:text-muted/60"
         />
       </div>
       <button
         type="submit"
         disabled={loading}
-        className="rounded-lg bg-gold px-6 py-3 font-display font-semibold text-ink transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="shrink-0 rounded-lg bg-gold px-6 py-3 font-display font-semibold text-surface transition-opacity hover:opacity-90 disabled:opacity-50"
       >
-        {loading ? "Reading commits…" : "Compute karma"}
+        {loading ? "Reading commits…" : submitLabel}
       </button>
     </form>
   );

@@ -10,10 +10,11 @@ export default function Leaderboard({ entries, currentWallet }) {
   }
 
   return (
-    <div className="w-full max-w-2xl overflow-hidden rounded-xl border border-hairline">
-      <table className="w-full text-left">
+    <div className="overflow-hidden rounded-xl border border-hairline shadow-card">
+      <div className="overflow-x-auto">
+      <table className="w-full min-w-[34rem] text-left">
         <thead>
-          <tr className="border-b border-hairline bg-surface2 font-mono text-xs uppercase tracking-normal text-muted">
+          <tr className="border-b border-hairline bg-surface2 font-mono text-xs text-muted">
             <th className="px-4 py-3 font-normal">Rank</th>
             <th className="px-4 py-3 font-normal">Developer</th>
             <th className="px-4 py-3 font-normal">Tier</th>
@@ -59,6 +60,7 @@ export default function Leaderboard({ entries, currentWallet }) {
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

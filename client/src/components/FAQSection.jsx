@@ -43,9 +43,8 @@ export default function FAQSection() {
   }
 
   return (
-    <section className="mb-16">
-      <h2 className="mb-6 font-display text-xl font-semibold text-ivory">FAQ</h2>
-      <div className="overflow-hidden rounded-xl border border-hairline">
+    <section>
+      <div className="overflow-hidden rounded-xl border border-hairline shadow-card">
         {FAQS.map((item, i) => {
           const isOpen = openIndex === i;
           return (
@@ -55,7 +54,7 @@ export default function FAQSection() {
             >
               <button
                 onClick={() => toggle(i)}
-                className="flex w-full items-center justify-between px-5 py-4 text-left"
+                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors hover:bg-surface2"
                 aria-expanded={isOpen}
               >
                 <span className="font-body text-sm font-semibold text-ivory pr-4">

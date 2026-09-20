@@ -54,8 +54,8 @@ export default function ScoreCard({ result, children }) {
   const tierMessage = nextTierMessage(score, tier);
 
   return (
-    <div className="w-full max-w-2xl rounded-xl border border-hairline bg-surface overflow-hidden">
-      <div className="flex items-center gap-4 border-b border-hairline p-6">
+    <div className="plate animate-rise overflow-hidden">
+      <div className="flex flex-wrap items-center gap-4 border-b border-hairline p-6">
         <img
           src={profile.avatar_url}
           alt={profile.username}
@@ -67,7 +67,7 @@ export default function ScoreCard({ result, children }) {
           </div>
           <div className="font-mono text-sm text-muted">@{profile.username}</div>
         </div>
-        <div className="text-right">
+        <div className="ml-auto text-right">
           <div className="font-display text-4xl font-bold text-gold leading-none tabular-nums">
             {animatedScore}
           </div>
@@ -89,7 +89,7 @@ export default function ScoreCard({ result, children }) {
         {Object.entries(featureContributions).map(([key, value], i) => (
           <div key={key} className="flex items-center gap-3">
             <Tooltip text={FEATURE_EXPLANATIONS[key] || "No description available."}>
-              <div className="w-40 shrink-0 font-body text-sm text-ivory/80 underline decoration-dotted decoration-muted/50 underline-offset-4">
+              <div className="w-32 shrink-0 font-body sm:w-40 text-sm text-ivory/80 underline decoration-dotted decoration-muted/50 underline-offset-4">
                 {FEATURE_LABELS[key] || key}
               </div>
             </Tooltip>

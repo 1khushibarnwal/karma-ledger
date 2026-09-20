@@ -1,6 +1,6 @@
 export default function SkeletonScoreCard() {
   return (
-    <div className="w-full max-w-2xl animate-pulse rounded-xl border border-hairline bg-surface overflow-hidden">
+    <div className="plate animate-pulse overflow-hidden">
       <div className="flex items-center gap-4 border-b border-hairline p-6">
         <div className="h-16 w-16 rounded-lg bg-surface2" />
         <div className="flex-1 space-y-2">
