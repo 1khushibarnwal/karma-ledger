@@ -33,6 +33,10 @@ const FAQS = [
     q: "Is this actually decentralized?",
     a: "Partially. The ledger — who holds what score — is fully decentralized and independently verifiable. The scoring is not; it depends on one backend today. That's an honest trade-off for this build, not a claim of full decentralization.",
   },
+  {
+    q: "Isn't GitHub-only too limiting — what about resumes, LinkedIn, or private work?",
+    a: "GitHub-only was a real limitation, and resumes/LinkedIn specifically won't fix it — they're self-reported, which is exactly the class of claim this project exists to replace. Instead we added Codeforces as a second source: competitive-programming ratings earned entirely through live, judge-verified contests, impossible to self-report or farm. It's kept as a clearly separate bonus on top of the GitHub-derived ML score, not blended into it, so it's obvious which part of a score came from which source. Good future candidates follow the same rule: independently verifiable, never self-claimed — think package registry publishing or Stack Overflow reputation. Employer-verified work history could eventually cover private/NDA'd contributions, but that needs a signed attestation from the employer, not a resume upload.",
+  },
 ];
 
 export default function FAQSection() {
