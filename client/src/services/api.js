@@ -2,8 +2,14 @@ import axios from "axios";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-export async function analyzeProfile(username) {
-  const { data } = await axios.get(`${API_BASE}/score/${username}`);
+export async function analyzeProfile(username, cfHandle) {
+  const { data } = await axios.get(
+    `${API_BASE}/score/${encodeURIComponent(username)}`,
+    {
+      // Only send the param when a handle was actually provided.
+      params: cfHandle ? { cfHandle } : undefined,
+    },
+  );
   return data;
 }
 

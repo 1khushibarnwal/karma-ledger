@@ -12,6 +12,7 @@ import { useRefreshLeaderboard } from "../hooks/useLeaderboard";
 export default function Score() {
   const [searchParams, setSearchParams] = useSearchParams();
   const username = searchParams.get("u") || "";
+  const cfHandle = searchParams.get("cf") || "";
 
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -24,13 +25,13 @@ export default function Score() {
   const requestRef = useRef(0);
 
   const runAnalysis = useCallback(
-    async (name) => {
+    async (name, cf) => {
       const requestId = ++requestRef.current;
       setLoading(true);
       setResult(null);
       setError(null);
       try {
-        const data = await analyzeProfile(name);
+        const data = await analyzeProfile(name, cf);
         if (requestRef.current !== requestId) return;
         setResult(data);
       } catch (err) {
@@ -47,15 +48,16 @@ export default function Score() {
 
   // The username lives in the URL, so a result is shareable and survives reload.
   useEffect(() => {
-    if (username) runAnalysis(username);
+    if (username) runAnalysis(username, cfHandle);
     else {
       setResult(null);
       setError(null);
     }
-  }, [username, runAnalysis]);
+  }, [username, cfHandle, runAnalysis]);
 
-  function handleSearch(name) {
-    setSearchParams({ u: name });
+  function handleSearch(name, cf) {
+    // Both values live in the URL so results stay shareable and survive reload.
+    setSearchParams(cf ? { u: name, cf } : { u: name });
   }
 
   return (
@@ -64,8 +66,9 @@ export default function Score() {
         Score a profile
       </h1>
       <p className="mt-3 max-w-[62ch] font-body text-base leading-relaxed text-muted">
-        Enter any public GitHub username. Scoring is free and needs no wallet — you only
-        connect one when you want to mint the result as a badge.
+        Enter any public GitHub username, and optionally a Codeforces handle for a rating
+        bonus. Scoring is free and needs no wallet — you only connect one when you want to
+        mint the result as a badge.
       </p>
 
       <div className="mt-8">
@@ -73,6 +76,8 @@ export default function Score() {
           onSearch={handleSearch}
           loading={loading}
           initialValue={username}
+          initialCfHandle={cfHandle}
+          showCodeforces
           autoFocus={!username}
         />
       </div>

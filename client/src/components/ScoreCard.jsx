@@ -25,6 +25,54 @@ const FEATURE_EXPLANATIONS = {
   consistency: "Longest streak of consecutive active days in your recent activity.",
 };
 
+// Standard Codeforces rank colours.
+const CF_RANK_COLORS = {
+  newbie: "#808080",
+  pupil: "#008000",
+  specialist: "#03a89e",
+  expert: "#0000ff",
+  "candidate master": "#aa00aa",
+  master: "#ff8c00",
+  "international master": "#ff8c00",
+  grandmaster: "#ff0000",
+  "international grandmaster": "#ff0000",
+  "legendary grandmaster": "#ff0000",
+};
+
+function CodeforcesSection({ codeforces, bonus, mlScore, score }) {
+  const rankColor = CF_RANK_COLORS[(codeforces.rank || "").toLowerCase()];
+  return (
+    <div className="border-t border-hairline p-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="font-body text-sm text-muted">Codeforces bonus</div>
+        <div className="font-mono text-sm text-signal">+{bonus} pts</div>
+      </div>
+      <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1 font-mono text-xs text-muted">
+        <a
+          href={`https://codeforces.com/profile/${codeforces.handle}`}
+          target="_blank"
+          rel="noreferrer"
+          className="text-ivory underline decoration-dotted underline-offset-4"
+        >
+          {codeforces.handle}
+        </a>
+        <span>
+          rating <span className="text-ivory">{codeforces.rating || "unrated"}</span>
+        </span>
+        <span>
+          max <span className="text-ivory">{codeforces.maxRating || "—"}</span>
+        </span>
+        <span className="capitalize" style={rankColor ? { color: rankColor } : undefined}>
+          {codeforces.rank}
+        </span>
+      </div>
+      <div className="mt-3 font-mono text-xs text-muted">
+        GitHub model {mlScore} + Codeforces {bonus} = {score} (capped at 1000)
+      </div>
+    </div>
+  );
+}
+
 const TIER_THRESHOLDS = [
   { name: "Silver", min: 400 },
   { name: "Gold", min: 600 },
@@ -39,7 +87,17 @@ function nextTierMessage(score, tier) {
 }
 
 export default function ScoreCard({ result, children }) {
-  const { profile, score, tier, featureContributions, modelInfo } = result;
+  const {
+    profile,
+    score,
+    tier,
+    featureContributions,
+    modelInfo,
+    mlScore,
+    codeforces,
+    codeforcesBonus = 0,
+    codeforcesError,
+  } = result;
   const maxContribution = Math.max(...Object.values(featureContributions).map(Math.abs), 0.01);
   const animatedScore = useCountUp(score, 900);
   const [barsVisible, setBarsVisible] = useState(false);
@@ -84,7 +142,7 @@ export default function ScoreCard({ result, children }) {
 
       <div className="space-y-3 p-6">
         <div className="font-body text-sm text-muted">
-          Score breakdown — how the model reached this number
+          Score breakdown — how the GitHub model reached {codeforces ? "its" : "this"} number
         </div>
         {Object.entries(featureContributions).map(([key, value], i) => (
           <div key={key} className="flex items-center gap-3">
@@ -114,6 +172,21 @@ export default function ScoreCard({ result, children }) {
           Model: {modelInfo.type} · {(modelInfo.testAccuracy * 100).toFixed(1)}% held-out accuracy
         </div>
       </div>
+
+      {codeforces && (
+        <CodeforcesSection
+          codeforces={codeforces}
+          bonus={codeforcesBonus}
+          mlScore={mlScore}
+          score={score}
+        />
+      )}
+
+      {codeforcesError && (
+        <div className="border-t border-hairline px-6 py-4 font-body text-sm text-bronze">
+          Codeforces handle couldn't be added: {codeforcesError}. Your score is GitHub-only.
+        </div>
+      )}
 
       {children && <div className="border-t border-hairline p-6">{children}</div>}
     </div>
