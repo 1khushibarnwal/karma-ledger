@@ -1,17 +1,30 @@
 import { useState } from "react";
 import { connectWallet, mintKarma } from "../services/web3";
 import { getMintAuthorization, confirmMint } from "../services/api";
+import { useToast } from "../context/ToastContext";
+import CopyButton from "./CopyButton";
 
-export default function MintButton({ githubUsername }) {
+export default function MintButton({ githubUsername, wallet, onWalletConnected, onMinted }) {
   const [status, setStatus] = useState("idle"); // idle | connecting | signing | minting | done | error
   const [txHash, setTxHash] = useState(null);
   const [error, setError] = useState(null);
+  const showToast = useToast();
 
   async function handleMint() {
     setError(null);
     try {
-      setStatus("connecting");
-      const { signer, address } = await connectWallet();
+      let signer, address;
+
+      if (wallet?.signer) {
+        // already connected via the header's wallet status — skip the extra MetaMask prompt
+        ({ signer, address } = wallet);
+      } else {
+        setStatus("connecting");
+        const connected = await connectWallet();
+        signer = connected.signer;
+        address = connected.address;
+        onWalletConnected?.(connected); // sync back up so the header reflects it too
+      }
 
       setStatus("signing");
       const auth = await getMintAuthorization(githubUsername, address);
@@ -28,10 +41,14 @@ export default function MintButton({ githubUsername }) {
       await confirmMint(githubUsername, address, hash);
       setTxHash(hash);
       setStatus("done");
+      showToast(`Karma badge minted for @${githubUsername}`, "success");
+      onMinted?.();
     } catch (err) {
       console.error(err);
-      setError(err.message || "Something went wrong");
+      const message = err.message || "Something went wrong";
+      setError(message);
       setStatus("error");
+      showToast(message, "error");
     }
   }
 
@@ -53,10 +70,16 @@ export default function MintButton({ githubUsername }) {
       >
         {labels[status]}
       </button>
+
       {txHash && (
-        <div className="mt-2 truncate font-mono text-xs text-muted">Tx: {txHash}</div>
+        <div className="mt-2 flex items-center gap-2">
+          <span className="truncate font-mono text-xs text-muted">Tx: {txHash}</span>
+          <CopyButton text={txHash} />
+        </div>
       )}
+
       {error && <div className="mt-2 font-body text-sm text-bronze">{error}</div>}
+
       <div className="mt-2 font-body text-xs text-muted">
         This badge is soulbound — it can never be transferred or sold, only re-minted to reflect an updated score.
       </div>

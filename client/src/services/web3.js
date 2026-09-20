@@ -10,21 +10,47 @@ const ABI = [
 
 export async function connectWallet() {
   if (!window.ethereum) {
-    throw new Error("No wallet found. Install MetaMask to mint your Karma badge.");
+    throw new Error(
+      "No wallet found. Install MetaMask to mint your Karma badge.",
+    );
   }
   const provider = new ethers.BrowserProvider(window.ethereum);
   await provider.send("eth_requestAccounts", []);
   const signer = await provider.getSigner();
   const address = await signer.getAddress();
-  return { provider, signer, address };
+  const network = await provider.getNetwork();
+  return { provider, signer, address, chainId: Number(network.chainId) };
 }
 
-export async function mintKarma({ signer, score, githubUsername, nonce, signature }) {
+const KNOWN_NETWORKS = {
+  1: "Ethereum",
+  11155111: "Sepolia",
+  31337: "Anvil (local)",
+  137: "Polygon",
+  80002: "Polygon Amoy",
+};
+
+export function getNetworkName(chainId) {
+  return KNOWN_NETWORKS[chainId] || `Chain ${chainId}`;
+}
+
+export async function mintKarma({
+  signer,
+  score,
+  githubUsername,
+  nonce,
+  signature,
+}) {
   if (!CONTRACT_ADDRESS) {
     throw new Error("VITE_CONTRACT_ADDRESS is not set in client/.env");
   }
   const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-  const tx = await contract.mintOrUpdateKarma(score, githubUsername, nonce, signature);
+  const tx = await contract.mintOrUpdateKarma(
+    score,
+    githubUsername,
+    nonce,
+    signature,
+  );
   const receipt = await tx.wait();
   return receipt.hash;
 }

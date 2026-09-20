@@ -1,4 +1,6 @@
-export default function Leaderboard({ entries }) {
+const MEDALS = ["🥇", "🥈", "🥉"];
+
+export default function Leaderboard({ entries, currentWallet }) {
   if (!entries?.length) {
     return (
       <div className="font-body text-sm text-muted">
@@ -20,22 +22,41 @@ export default function Leaderboard({ entries }) {
           </tr>
         </thead>
         <tbody>
-          {entries.map((entry, i) => (
-            <tr key={entry._id} className="border-b border-hairline/60 bg-surface last:border-0">
-              <td className="px-4 py-3 font-mono text-sm text-muted">{i + 1}</td>
-              <td className="px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <img src={entry.avatarUrl} alt="" className="h-6 w-6 rounded" />
-                  <span className="font-body text-sm text-ivory">{entry.githubUsername}</span>
-                </div>
-              </td>
-              <td className="px-4 py-3 font-mono text-xs text-muted">{entry.tier}</td>
-              <td className="px-4 py-3 text-right font-mono text-sm text-gold">{entry.score}</td>
-              <td className="px-4 py-3 text-right font-mono text-xs text-muted">
-                {entry.mintTxHash ? "✓ minted" : "—"}
-              </td>
-            </tr>
-          ))}
+          {entries.map((entry, i) => {
+            const isYou =
+              currentWallet &&
+              entry.walletAddress &&
+              entry.walletAddress.toLowerCase() === currentWallet.toLowerCase();
+
+            return (
+              <tr
+                key={entry._id}
+                className={`border-b border-hairline/60 last:border-0 ${
+                  isYou ? "bg-surface2" : "bg-surface"
+                }`}
+              >
+                <td className="px-4 py-3 font-mono text-sm text-muted">
+                  {MEDALS[i] || i + 1}
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <img src={entry.avatarUrl} alt="" className="h-6 w-6 rounded" />
+                    <span className="font-body text-sm text-ivory">{entry.githubUsername}</span>
+                    {isYou && (
+                      <span className="rounded border border-signal/40 px-1.5 py-0.5 font-mono text-[10px] text-signal">
+                        you
+                      </span>
+                    )}
+                  </div>
+                </td>
+                <td className="px-4 py-3 font-mono text-xs text-muted">{entry.tier}</td>
+                <td className="px-4 py-3 text-right font-mono text-sm text-gold">{entry.score}</td>
+                <td className="px-4 py-3 text-right font-mono text-xs text-muted">
+                  {entry.mintTxHash ? "✓ minted" : "—"}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
