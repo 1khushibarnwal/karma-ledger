@@ -14,7 +14,9 @@ if (!projectId && import.meta.env.DEV) {
 
 // foundry (Anvil, chain 31337) is first so local development is the default
 // target, matching the deploy script in the contracts package.
-export const chains = [foundry, sepolia, mainnet, polygon, polygonAmoy];
+export const chains = import.meta.env.PROD
+  ? [sepolia, mainnet, polygon, polygonAmoy]
+  : [foundry, sepolia, mainnet, polygon, polygonAmoy];
 
 export const wagmiConfig = getDefaultConfig({
   appName: "KarmaLedger",

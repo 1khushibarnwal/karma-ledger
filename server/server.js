@@ -8,7 +8,13 @@ const mintRoutes = require("./routes/mint");
 const leaderboardRoutes = require("./routes/leaderboard");
 
 const app = express();
-app.use(cors());
+// In production set CLIENT_URL to your Vercel URL(s), comma-separated.
+// If unset (local dev) all origins are allowed.
+const allowedOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((s) => s.trim().replace(/\/$/, ""))
+  .filter(Boolean);
+app.use(cors(allowedOrigins.length ? { origin: allowedOrigins } : undefined));
 app.use(express.json());
 
 connectDB();
