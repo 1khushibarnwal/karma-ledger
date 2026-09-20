@@ -16,3 +16,5 @@ dist/
 
 *.Identifier
 Zone.Identifier
+
+.venv/
