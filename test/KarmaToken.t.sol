@@ -19,24 +19,16 @@ contract KarmaTokenTest is Test {
         karma = new KarmaToken(signer);
     }
 
-    function _sign(
-        address recipient,
-        uint256 score,
-        string memory username,
-        uint256 nonce
-    ) internal view returns (bytes memory) {
-        bytes32 payloadHash = keccak256(
-            abi.encodePacked(recipient, score, username, nonce, address(karma))
-        );
+    function _sign(address recipient, uint256 score, string memory username, uint256 nonce)
+        internal
+        view
+        returns (bytes memory)
+    {
+        bytes32 payloadHash = keccak256(abi.encodePacked(recipient, score, username, nonce, address(karma)));
 
-        bytes32 ethSignedHash = MessageHashUtils.toEthSignedMessageHash(
-            payloadHash
-        );
+        bytes32 ethSignedHash = MessageHashUtils.toEthSignedMessageHash(payloadHash);
 
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(
-            signerPrivateKey,
-            ethSignedHash
-        );
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(signerPrivateKey, ethSignedHash);
 
         return abi.encodePacked(r, s, v);
     }
@@ -52,9 +44,7 @@ contract KarmaTokenTest is Test {
         assertEq(tokenId, 1);
         assertEq(karma.ownerOf(tokenId), alice);
 
-        (uint256 score, string memory username, , uint8 tier) = karma.karmaOf(
-            tokenId
-        );
+        (uint256 score, string memory username,, uint8 tier) = karma.karmaOf(tokenId);
 
         assertEq(score, 750);
         assertEq(username, "alice-dev");
@@ -65,19 +55,9 @@ contract KarmaTokenTest is Test {
         // Sign with a random key that is NOT the trusted signer
         uint256 wrongKey = 0xBAD;
 
-        bytes32 payloadHash = keccak256(
-            abi.encodePacked(
-                alice,
-                uint256(999),
-                "alice-dev",
-                uint256(1),
-                address(karma)
-            )
-        );
+        bytes32 payloadHash = keccak256(abi.encodePacked(alice, uint256(999), "alice-dev", uint256(1), address(karma)));
 
-        bytes32 ethSignedHash = MessageHashUtils.toEthSignedMessageHash(
-            payloadHash
-        );
+        bytes32 ethSignedHash = MessageHashUtils.toEthSignedMessageHash(payloadHash);
 
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(wrongKey, ethSignedHash);
 
@@ -117,7 +97,7 @@ contract KarmaTokenTest is Test {
         assertEq(karma.tokenOfOwner(alice), tokenId);
         assertEq(karma.balanceOf(alice), 1);
 
-        (uint256 score, , , uint8 tier) = karma.karmaOf(tokenId);
+        (uint256 score,,, uint8 tier) = karma.karmaOf(tokenId);
 
         assertEq(score, 650);
         assertEq(tier, 2); // Gold
@@ -167,24 +147,15 @@ contract KarmaTokenTest is Test {
         _mintAndCheckTier(bob, 999, 3); // >=800 -> Platinum
     }
 
-    function _mintAndCheckTier(
-        address who,
-        uint256 score,
-        uint8 expectedTier
-    ) internal {
-        bytes memory sig = _sign(
-            who,
-            score,
-            "tier-test",
-            uint256(uint160(who))
-        );
+    function _mintAndCheckTier(address who, uint256 score, uint8 expectedTier) internal {
+        bytes memory sig = _sign(who, score, "tier-test", uint256(uint160(who)));
 
         vm.prank(who);
         karma.mintOrUpdateKarma(score, "tier-test", uint256(uint160(who)), sig);
 
         uint256 tokenId = karma.tokenOfOwner(who);
 
-        (, , , uint8 tier) = karma.karmaOf(tokenId);
+        (,,, uint8 tier) = karma.karmaOf(tokenId);
 
         assertEq(tier, expectedTier);
     }
