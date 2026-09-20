@@ -3,6 +3,8 @@ import SearchBar from "./components/SearchBar";
 import ScoreCard from "./components/ScoreCard";
 import MintButton from "./components/MintButton";
 import Leaderboard from "./components/Leaderboard";
+import DifferentiationSection from "./components/DifferentiationSection";
+import FAQSection from "./components/FAQSection";
 import { analyzeProfile, getLeaderboard } from "./services/api";
 
 export default function App() {
@@ -67,10 +69,14 @@ export default function App() {
           </div>
         )}
 
-        <section>
+        <section className="mb-16">
           <h2 className="mb-4 font-display text-xl font-semibold text-ivory">Ledger</h2>
           <Leaderboard entries={leaderboard} />
         </section>
+
+        <DifferentiationSection />
+
+        <FAQSection />
 
         <footer className="mt-16 border-t border-hairline pt-6 font-mono text-xs text-muted">
           Built for Hack Devengers 2.0 · MERN + logistic regression + soulbound ERC-721
