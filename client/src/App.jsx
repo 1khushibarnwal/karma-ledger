@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Score from "./pages/Score";
 import Ledger from "./pages/Ledger";
 import HowItWorks from "./pages/HowItWorks";
+import Docs from "./pages/Docs";
 import Faq from "./pages/Faq";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/score" element={<Score />} />
           <Route path="/ledger" element={<Ledger />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/docs" element={<Docs />} />
           <Route path="/faq" element={<Faq />} />
           {/* the old single-page app linked to /analyze */}
           <Route path="/analyze" element={<Navigate to="/score" replace />} />

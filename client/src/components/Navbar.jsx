@@ -8,6 +8,7 @@ const LINKS = [
   { to: "/score", label: "Score a profile" },
   { to: "/ledger", label: "Ledger" },
   { to: "/how-it-works", label: "How it works" },
+  { to: "/docs", label: "Docs" },
   { to: "/faq", label: "FAQ" },
 ];
 
