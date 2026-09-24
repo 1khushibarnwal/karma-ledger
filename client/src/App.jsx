@@ -3,6 +3,7 @@ import { useEffect } from "react";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import AssistantWidget from "./components/AssistantWidget";
 import Home from "./pages/Home";
 import Score from "./pages/Score";
 import Ledger from "./pages/Ledger";
@@ -38,6 +39,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <AssistantWidget />
     </div>
   );
 }

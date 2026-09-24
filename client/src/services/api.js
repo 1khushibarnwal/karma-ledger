@@ -34,3 +34,11 @@ export async function getLeaderboard() {
   const { data } = await axios.get(`${API_BASE}/leaderboard`);
   return data;
 }
+
+export async function askAssistant(message, history) {
+  const { data } = await axios.post(`${API_BASE}/assistant/chat`, {
+    message,
+    history,
+  });
+  return data.reply;
+}
