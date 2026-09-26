@@ -6,7 +6,7 @@
 
 Built in 24 hours for [Hack Devengers 2.0](https://unstop.com/hackathons/hack-devengers-20-devengers-1749441), an open-innovation hackathon hosted on Unstop.
 
-### 🚀 [Live Demo](https://karma-ledger-ten.vercel.app/)
+### 🚀 [Live Demo](https://karmaledger.vercel.app/)
 
 · [Report a bug](../../issues) · [Smart contract](./src/KarmaToken.sol)
 
